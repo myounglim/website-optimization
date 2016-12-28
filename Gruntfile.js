@@ -8,7 +8,7 @@ module.exports = function(grunt) {
           sizes: [{
             width: 100,
             suffix: '_small',
-            quality: 30
+            quality: 20
           }]
         },
         files: [{
@@ -19,9 +19,29 @@ module.exports = function(grunt) {
         }]
       }
     },
+    imagemin: {                          // Task
+      static: {                          // Target
+        options: {                       // Target options
+          optimizationLevel: 4
+
+        }
+      },
+      dynamic: {                         // Another target
+        files: [{
+          expand: true,                  // Enable dynamic expansion
+          cwd: 'img/',                   // Src matches are relative to this path
+          src: ['*.{gif,jpg,png}'],   // Actual patterns to match
+          dest: 'img-minified/'                  // Destination path prefix
+        }]
+      }
+    }
   });
 
   grunt.loadNpmTasks('grunt-responsive-images');
-  grunt.registerTask('default', ['responsive_images']);
+  grunt.loadNpmTasks('grunt-contrib-imagemin');
+  grunt.registerTask('default', [
+    'responsive_images',
+    'imagemin'
+    ]);
 
 };
