@@ -23,7 +23,6 @@ module.exports = function(grunt) {
       static: {                          // Target
         options: {                       // Target options
           optimizationLevel: 4
-
         }
       },
       dynamic: {                         // Another target
