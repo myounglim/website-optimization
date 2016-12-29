@@ -19,6 +19,7 @@ module.exports = function(grunt) {
         }]
       }
     },
+
     imagemin: {                          // Task
       static: {                          // Target
         options: {                       // Target options
@@ -33,14 +34,59 @@ module.exports = function(grunt) {
           dest: 'img-minified/'                  // Destination path prefix
         }]
       }
+    },
+
+    htmlmin: {                                     // Task
+    dist: {                                      // Target
+      options: {                                 // Target options
+        removeComments: true,
+        collapseWhitespace: true,
+        minifyCSS: true,
+        minifyJS: true,
+        minifyURLs: true
+      },
+      files: {                                   // Dictionary of files
+        'release/index.html': 'index.html'     // 'destination': 'source'
+      }
     }
+  },
+
+  cssmin: {
+    target: {
+      files: [{
+        expand: true,
+        cwd: 'css/',
+        src: ['*.css'],
+        dest: 'release/css',
+        ext: '.min.css'
+      }]
+    }
+  },
+
+  uglify: {
+    my_target: {
+      files: [{
+          expand: true,
+          cwd: 'js/',
+          src: ['*.js'],
+          dest: 'release/js'
+      }]
+    }
+  }
+
   });
 
   grunt.loadNpmTasks('grunt-responsive-images');
   grunt.loadNpmTasks('grunt-contrib-imagemin');
+  grunt.loadNpmTasks('grunt-contrib-htmlmin');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.registerTask('default', [
     'responsive_images',
-    'imagemin'
+    'imagemin',
+    'htmlmin',
+    'cssmin',
+    'uglify'
     ]);
 
 };
