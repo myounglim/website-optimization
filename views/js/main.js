@@ -441,6 +441,10 @@ var resizePizzas = function(size) {
   }
 
   // Iterates through pizza elements on the page and changes their widths
+  // do the document.querySelectorAll outside the loop and store it in a variable instead of calling it separately
+  // determine the layout width outside of the loop or will result in forced synchronous layout warnings
+  // the old determineDx function did unnecessary calculations so remove it in favor of changing the widths by
+  // set percentages depending on the slider value
   function changePizzaSizes(size) {
     var randPizzaContainer = document.querySelectorAll(".randomPizzaContainer");
     var newWidth = determineNewWidth(size);
@@ -461,6 +465,7 @@ var resizePizzas = function(size) {
 window.performance.mark("mark_start_generating"); // collect timing data
 
 // This for-loop actually creates and appends all of the pizzas when the page loads
+// do the document.getElementById call outside the loop
 var pizzasDiv = document.getElementById("randomPizzas");
 for (var i = 2; i < 100; i++) {
   //var pizzasDiv = document.getElementById("randomPizzas");
@@ -490,7 +495,11 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 // The following code for sliding background pizzas was pulled from Ilya's demo found at:
 // https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
 var pizzaMover = document.getElementsByClassName('mover');
+
 // Moves the sliding background pizzas based on scroll position
+// The old function gave rise to forced synchronous layout warnings
+// Instead, get the vertical position outside of the loop, and do the phase calculation separately
+// The 5 different phases comes from the old equation of var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
@@ -519,6 +528,7 @@ function updatePositions() {
 window.addEventListener('scroll', updatePositions);
 
 // Generates the sliding pizzas when the page loads.
+// the user is never going to see all the pizzas on the screen at once so changed the exit condition to s / cols = 32
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
